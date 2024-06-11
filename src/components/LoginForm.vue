@@ -1,0 +1,112 @@
+<template>
+  <v-container class="login-container | d-flex flex-column align-center mt-8">
+    <p class="secondary--text">Login to your account to continue</p>
+    <p class="grey--text d-flex flex-column align-center">
+      <span><span class="font-weight-bold">Admin</span> - emilys , emilyspass</span>
+      <span><span class="font-weight-bold">User</span> - averyp , averyppass</span>
+    </p>
+    <v-card width="480" class="pa-4">
+      <!-- login -->
+      <v-card-title class="justify-center font-weight-bold text-sm-h4 blue--text text--darken-2">
+        Login
+      </v-card-title>
+      <!-- form -->
+      <v-form v-model="valid" @submit.prevent="handleFormSubmit">
+        <v-container>
+          <v-row>
+            <v-col cols="12">
+              <!-- username -->
+              <v-text-field
+                v-model="username"
+                :rules="usernameRules"
+                label="Username"
+                prepend-icon="mdi-account-circle"
+                required
+              ></v-text-field>
+            </v-col>
+            <v-col cols="12">
+              <!-- password -->
+              <v-text-field
+                :type="showPassword ? 'text' : 'password'"
+                v-model="password"
+                :rules="passwordRules"
+                label="Password"
+                prepend-icon="mdi-lock"
+                :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                @click:append="showPassword = !showPassword"
+                required
+              ></v-text-field>
+            </v-col>
+          </v-row>
+        </v-container>
+        <!-- login button -->
+        <v-card-actions>
+          <v-btn
+            :loading="fetchingData"
+            :disabled="valid ? false : true"
+            type="submit"
+            block
+            color="primary"
+            >Login</v-btn
+          >
+        </v-card-actions>
+      </v-form>
+    </v-card>
+  </v-container>
+</template>
+
+<script>
+import { mapActions } from "vuex";
+
+export default {
+  data: () => ({
+    fetchingData: false,
+    valid: false,
+    showPassword: false,
+    username: "",
+    password: "",
+    usernameRules: [(v) => !!v || "Username is required"],
+    passwordRules: [
+      (v) => !!v || "Password is required",
+      (v) => v.length >= 6 || "Password must be greater than 6 characters",
+    ],
+  }),
+
+  methods: {
+    ...mapActions(["loginUser"]),
+
+    /**
+     * Function handle login form submission
+     *
+     * @param {none}
+     * @returns {void}
+     */
+    async handleFormSubmit() {
+      this.fetchingData = true;
+
+      // triggers loginUser action
+      const response = await this.loginUser({
+        username: this.username,
+        password: this.password,
+      });
+
+      this.fetchingData = false;
+      // if login fails then display a message
+      if (response.error) {
+        this.$toast.error(response.error);
+        return;
+      }
+
+      this.$toast.success("Login successful!");
+
+      // if the user accesses any route that is protected, then the
+      // user is redirected back to login page. With this the user can
+      // go back to the protected page they tried to access after logging in.
+      // const redirectPath = this.$route.query.redirect || "/";
+      // this.$router.push(redirectPath);
+    },
+  },
+};
+</script>
+
+<style scoped></style>
