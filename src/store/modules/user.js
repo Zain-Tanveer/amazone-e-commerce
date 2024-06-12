@@ -1,4 +1,5 @@
 import API from "@/services/API.js";
+import { SET_USER, SET_TOKEN, SET_REFRESH_TOKEN, SET_IS_ACTIVE } from "@/utils/mutations";
 
 const state = {
   user: {},
@@ -41,7 +42,7 @@ const mutations = {
    * @param {Object} payload - An object containing additional data.
    * @returns {none}
    */
-  SET_USER: (state, payload) => {
+  [SET_USER]: (state, payload) => {
     state.user = payload.user;
   },
 
@@ -52,7 +53,7 @@ const mutations = {
    * @param {Object} payload - An object containing additional data.
    * @returns {none}
    */
-  SET_TOKEN: (state, payload) => {
+  [SET_TOKEN]: (state, payload) => {
     state.token = payload.token;
   },
 
@@ -63,7 +64,7 @@ const mutations = {
    * @param {Object} payload - An object containing additional data.
    * @returns {none}
    */
-  SET_REFRESH_TOKEN: (state, payload) => {
+  [SET_REFRESH_TOKEN]: (state, payload) => {
     state.refreshToken = payload.refreshToken;
   },
 
@@ -74,7 +75,7 @@ const mutations = {
    * @param {Object} payload - An object containing additional data.
    * @returns {none}
    */
-  SET_IS_ACTIVE: (state, payload) => {
+  [SET_IS_ACTIVE]: (state, payload) => {
     state.isActive = payload.isActive;
   },
 };

@@ -1,4 +1,5 @@
 import API from "@/services/API.js";
+import { SET_PRODUCTS, SET_PRODUCTS_FOR_YOU } from "@/utils/mutations";
 
 const state = {
   productsForYou: [],
@@ -45,7 +46,7 @@ const mutations = {
    * @param {Object} payload - An object containing additional data.
    * @returns {none}
    */
-  SET_PRODUCTS: (state, payload) => {
+  [SET_PRODUCTS]: (state, payload) => {
     state.products = payload.products;
   },
 
@@ -56,7 +57,7 @@ const mutations = {
    * @param {Object} payload - An object containing additional data.
    * @returns {none}
    */
-  SET_PRODUCTS_FOR_YOU: (state, payload) => {
+  [SET_PRODUCTS_FOR_YOU]: (state, payload) => {
     state.productsForYou = payload.products;
   },
 };

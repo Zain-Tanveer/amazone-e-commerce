@@ -1,4 +1,5 @@
 import API from "@/services/API.js";
+import { SET_CART_DATA, SET_HAS_CART } from "@/utils/mutations";
 
 const state = {
   cartData: {
@@ -64,7 +65,7 @@ const mutations = {
    * @param {Object} payload - An object containing additional data.
    * @returns {none}
    */
-  SET_CART_DATA: (state, payload) => {
+  [SET_CART_DATA]: (state, payload) => {
     state.cartData = { ...payload.cartData };
   },
 
@@ -75,7 +76,7 @@ const mutations = {
    * @param {Object} payload - An object containing additional data.
    * @returns {none}
    */
-  SET_HAS_CART: (state, payload) => {
+  [SET_HAS_CART]: (state, payload) => {
     state.hasCart = payload.hasCart;
   },
 };

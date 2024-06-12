@@ -57,6 +57,7 @@
 
 <script>
 import { mapActions } from "vuex";
+import { USERNAME_RULES, PASSWORD_RULES } from "@/utils/validations.js";
 
 export default {
   data: () => ({
@@ -65,12 +66,29 @@ export default {
     showPassword: false,
     username: "",
     password: "",
-    usernameRules: [(v) => !!v || "Username is required"],
-    passwordRules: [
-      (v) => !!v || "Password is required",
-      (v) => v.length >= 6 || "Password must be greater than 6 characters",
-    ],
   }),
+
+  computed: {
+    /**
+     * Computed property to get username rules.
+     *
+     * @param {none}
+     * @returns {Array} - rules
+     */
+    usernameRules() {
+      return USERNAME_RULES;
+    },
+
+    /**
+     * Computed property to get password rules.
+     *
+     * @param {none}
+     * @returns {Array} - rules
+     */
+    passwordRules() {
+      return PASSWORD_RULES;
+    },
+  },
 
   methods: {
     ...mapActions(["loginUser"]),

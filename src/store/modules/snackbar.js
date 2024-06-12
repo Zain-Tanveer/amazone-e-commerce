@@ -1,3 +1,5 @@
+import { SET_SNACKBAR } from "@/utils/mutations";
+
 const state = {
   snackbar: {},
 };
@@ -20,7 +22,7 @@ const mutations = {
    * @param {Object} payload - An object containing additional data.
    * @returns {none}
    */
-  SET_SNACKBAR: (state, payload) => {
+  [SET_SNACKBAR]: (state, payload) => {
     state.snackbar = payload;
   },
 };

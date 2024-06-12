@@ -1,4 +1,5 @@
 import API from "@/services/API";
+import { SET_CATEGORIES } from "@/utils/mutations";
 
 const state = {
   categories: [],
@@ -22,7 +23,7 @@ const mutations = {
    * @param {Object} payload - An object containing additional data.
    * @returns {none}
    */
-  SET_CATEGORIES: (state, payload) => {
+  [SET_CATEGORIES]: (state, payload) => {
     state.categories = payload.categories;
   },
 };
