@@ -71,12 +71,15 @@ const actions = {
    * @returns {none}
    */
   async fetchProducts({ commit }) {
-    try {
-      const response = await API.getAllProducts();
-      commit("SET_PRODUCTS_FOR_YOU", { products: response.data.products });
-    } catch (error) {
-      console.log(error);
-    }
+    const done = (res) => {
+      if (res?.status === 200) {
+        commit("SET_PRODUCTS_FOR_YOU", { products: res.data.products });
+      } else {
+        commit("SET_SNACKBAR", { message: `Data ${res?.response?.data}`, type: "error" });
+      }
+    };
+
+    await API.get("/products?limit=20", done);
   },
 };
 

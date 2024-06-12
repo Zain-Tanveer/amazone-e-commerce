@@ -154,22 +154,27 @@ export default {
      * @returns {void}
      */
     async fetchProducts() {
-      try {
-        this.fetching = true;
-
-        // if url has category then fetch category products
-        if (this.category) {
-          const response = await API.getCategoryProducts(this.category, this.skip, this.limit);
-          this.setData(response.data);
+      const done = (res) => {
+        if (res?.status === 200) {
+          this.setData(res.data);
         } else {
-          const response = await API.getAllProducts(this.skip);
-          this.setData(response.data);
+          console.log(res);
         }
-      } catch (error) {
-        console.log(error);
-      } finally {
-        this.fetching = false;
+      };
+
+      this.fetching = true;
+
+      // if url has category then fetch category products
+      if (this.category) {
+        await API.get(
+          `/products/category/${this.category}?limit=${this.limit}&skip=${this.skip}`,
+          done
+        );
+      } else {
+        await API.get(`/products?skip=${this.skip}`, done);
       }
+
+      this.fetching = false;
     },
 
     /**

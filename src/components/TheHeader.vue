@@ -185,7 +185,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(["authenticateUser", "fetchCart", "logoutUser"]),
+    ...mapActions(["authenticateUser", "logoutUser"]),
 
     /**
      * Function to handle click of search icon.
@@ -245,19 +245,14 @@ export default {
     },
 
     /**
-     * Function to authenticate user and fetchCart if user does not have one.
+     * Function to authenticate user
      *
      * @param {none}
      * @returns {void}
      */
     async validateUser() {
       // fetches user authentication
-      const response = await this.authenticateUser();
-
-      // if authentication is successful and user does not have a cart
-      if (!response.error && !this.getHasCart) {
-        this.fetchCart();
-      }
+      await this.authenticateUser();
     },
 
     /**
@@ -267,19 +262,22 @@ export default {
      * @returns {void}
      */
     async getProducts() {
-      try {
-        if (this.keyword) {
-          this.loading = true;
-          const response = await API.getSearchProducts(this.keyword);
-          this.products = response.data.products;
+      const done = (res) => {
+        if (res?.status === 200) {
+          this.products = res.data.products;
         } else {
-          this.products = [];
+          console.log(res);
         }
-      } catch (error) {
-        console.log(error);
-      } finally {
-        this.loading = false;
+      };
+
+      if (this.keyword) {
+        this.loading = true;
+        await API.get(`/products/search?q=${this.keyword}&limit=10`, done);
+      } else {
+        this.products = [];
       }
+
+      this.loading = false;
     },
   },
 };

@@ -133,16 +133,17 @@ export default {
     },
 
     async fetchProducts() {
-      try {
-        this.fetching = true;
-        const response = await API.getAllProducts(this.skip, this.limit);
-        this.setData(response.data);
+      const done = (res) => {
+        if (res?.status === 200) {
+          this.setData(res.data);
+        } else {
+          console.log(res);
+        }
+      };
 
-        this.fetching = false;
-        console.log(response);
-      } catch (error) {
-        console.log(error);
-      }
+      this.fetching = true;
+      await API.get(`/products?limit=${this.limit}&skip=${this.skip}`, done);
+      this.fetching = false;
     },
 
     /**

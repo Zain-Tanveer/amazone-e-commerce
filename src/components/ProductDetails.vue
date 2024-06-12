@@ -216,7 +216,7 @@ export default {
      * @returns {void}
      */
     product_id() {
-      //
+      // make changes here
     },
   },
 
@@ -291,14 +291,7 @@ export default {
         };
 
         // trigger updateCart action to update the user cart
-        const response = await this.updateCart(payload);
-
-        // if a response is thrown then show an error
-        if (response.error) {
-          this.$toast.error(response.error);
-        } else {
-          this.$toast.success("Product added to cart!");
-        }
+        await this.updateCart(payload);
       }
 
       this.loading = false;
@@ -311,20 +304,23 @@ export default {
      * @returns {void}
      */
     async fetchProduct() {
-      try {
-        const response = await API.getProductById(this.product_id);
-        this.product = response.data;
-        this.productImage = response.data.images[0];
+      const done = (res) => {
+        if (res?.status === 200) {
+          this.product = res.data;
+          this.productImage = res.data.images[0];
 
-        // if product has available stock then set the quantity to 1
-        if (response.data.stock > 0) {
-          this.quantity = 1;
+          // if product has available stock then set the quantity to 1
+          if (res.data.stock > 0) {
+            this.quantity = 1;
+          }
+
+          this.loadingProducts = false;
+        } else {
+          console.log(res);
         }
+      };
 
-        this.loadingProducts = false;
-      } catch (error) {
-        console.log(error);
-      }
+      await API.get(`/products/${this.product_id}`, done);
     },
   },
 };

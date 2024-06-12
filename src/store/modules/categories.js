@@ -37,12 +37,15 @@ const actions = {
    * @returns {none}
    */
   async fetchCategories({ commit }) {
-    try {
-      const response = await API.getAllCategories();
-      commit("SET_CATEGORIES", { categories: response.data });
-    } catch (error) {
-      console.log(error);
-    }
+    const done = (res) => {
+      if (res?.status === 200) {
+        commit("SET_CATEGORIES", { categories: res.data });
+      } else {
+        commit("SET_SNACKBAR", { message: `Data ${res?.response?.data}`, type: "error" });
+      }
+    };
+
+    await API.get("/products/categories", done);
   },
 };
 

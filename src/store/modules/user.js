@@ -89,30 +89,33 @@ const actions = {
    * @returns {Object} - either empty or contains error, useful for displaying error to user
    */
   async loginUser({ commit, dispatch }, payload) {
-    try {
-      // getting response from login dummyjson api
-      const response = await API.loginUser(payload);
-      commit("SET_TOKEN", { token: response.data.token });
-      commit("SET_REFRESH_TOKEN", { refreshToken: response.data.refreshToken });
-      commit("SET_IS_ACTIVE", { isActive: true });
+    const done = async (res) => {
+      if (res?.status === 200) {
+        commit("SET_TOKEN", { token: res.data.token });
+        commit("SET_REFRESH_TOKEN", { refreshToken: res.data.refreshToken });
+        commit("SET_IS_ACTIVE", { isActive: true });
 
-      // needed to fetch detailed user
-      // info for admin dashboard
-      await dispatch("authenticateUser");
+        commit("SET_SNACKBAR", { message: "Login Successful!", type: "success" });
 
-      // fetches user's cart
-      dispatch("fetchCart");
+        // needed to fetch detailed user
+        // info for admin dashboard
+        await dispatch("authenticateUser");
 
-      return {};
-    } catch (error) {
-      // if login fails then returns error message,
-      // this is handled in LoginForm.vue component
-      if (error.code === "ERR_BAD_REQUEST") {
-        return { error: error.response.data.message };
+        // fetches user's cart
+        dispatch("fetchCart");
+      } else {
+        if (res?.response?.status === 400) {
+          // if login fails then show response message
+          commit("SET_SNACKBAR", { message: res?.response?.data?.message, type: "error" });
+        }
       }
+    };
 
-      return { error: error.message };
-    }
+    // sets the token expiration time to 1 minute
+    // useful for testing
+    // payload.expiresInMins = 1;
+
+    await API.post("/auth/login", done, payload);
   },
 
   /**
@@ -124,16 +127,13 @@ const actions = {
    * @returns {Object} - either empty or contains error, useful for displaying error to user
    */
   async authenticateUser({ state, commit, dispatch }) {
-    try {
-      // if authentication is successful
-      const response = await API.authenticateUser({ token: state.token });
-      commit("SET_USER", { user: response.data });
-      commit("SET_IS_ACTIVE", { isActive: true });
+    let response = {};
 
-      return {};
-    } catch (error) {
-      // if authentication fails
-      if (error.response && error.response.status === 401) {
+    const done = (res) => {
+      if (res?.status === 200) {
+        commit("SET_USER", { user: res.data });
+        commit("SET_IS_ACTIVE", { isActive: true });
+      } else if (res?.response?.status === 401) {
         // if user is currently active
         // this is set to true when user logs in
         // will be set to false when user refreshes
@@ -154,17 +154,22 @@ const actions = {
             },
           });
 
-          return { error: "Token expired!" };
+          response.error = "Token expired!";
         } else {
           // if user is active but the token expires
           // then dispatch an action which refreshes session
           dispatch("refreshSession");
-          return {};
         }
       }
+    };
 
-      return { error: error.message };
-    }
+    const headers = {
+      Authorization: `Bearer ${state.token}`,
+    };
+
+    await API.get("/auth/me", done, headers);
+
+    return response;
   },
 
   /**
@@ -176,14 +181,20 @@ const actions = {
    * @returns {none}
    */
   async refreshSession({ state, commit }) {
-    try {
-      // refreshes the user's token
-      const response = await API.refreshSession({ token: state.refreshToken });
-      commit("SET_TOKEN", { token: response.data.token });
-      commit("SET_REFRESH_TOKEN", { refreshToken: response.data.refreshToken });
-    } catch (error) {
-      console.log(error);
-    }
+    const done = (res) => {
+      if (res?.status === 200) {
+        commit("SET_TOKEN", { token: res.data.token });
+        commit("SET_REFRESH_TOKEN", { refreshToken: res.data.refreshToken });
+      } else {
+        console.log(res);
+      }
+    };
+
+    const payload = {
+      refreshToken: state.refreshToken,
+    };
+
+    await API.post("/auth/refresh", done, payload);
   },
 
   /**

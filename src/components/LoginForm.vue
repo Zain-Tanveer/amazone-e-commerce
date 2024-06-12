@@ -85,25 +85,9 @@ export default {
       this.fetchingData = true;
 
       // triggers loginUser action
-      const response = await this.loginUser({
-        username: this.username,
-        password: this.password,
-      });
+      await this.loginUser({ username: this.username, password: this.password });
 
       this.fetchingData = false;
-      // if login fails then display a message
-      if (response.error) {
-        this.$toast.error(response.error);
-        return;
-      }
-
-      this.$toast.success("Login successful!");
-
-      // if the user accesses any route that is protected, then the
-      // user is redirected back to login page. With this the user can
-      // go back to the protected page they tried to access after logging in.
-      // const redirectPath = this.$route.query.redirect || "/";
-      // this.$router.push(redirectPath);
     },
   },
 };

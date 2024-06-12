@@ -90,33 +90,35 @@ const actions = {
    * @returns {none}
    */
   async fetchCart({ commit, getters }) {
-    try {
-      // get user from user module, needed to get user cart
-      const user = getters.getUser;
-
-      // fetches user carts
-      const response = await API.getCartByUser(user);
-      // if user does not have carts
-      if (response.data.total === 0) {
-        commit("SET_CART_DATA", {
-          cartData: {
-            products: [],
-            id: 0,
-            total: 0,
-            discountedTotal: 0,
-            totalProducts: 0,
-            totalQuantity: 0,
-          },
-        });
+    const done = (res) => {
+      if (res?.status === 200) {
+        // if user does not have carts
+        if (res.data.total === 0) {
+          commit("SET_CART_DATA", {
+            cartData: {
+              products: [],
+              id: 0,
+              total: 0,
+              discountedTotal: 0,
+              totalProducts: 0,
+              totalQuantity: 0,
+            },
+          });
+        } else {
+          // gets the first cart and sets the data accordingly
+          const cartData = res.data.carts[0];
+          commit("SET_CART_DATA", { cartData });
+          commit("SET_HAS_CART", { hasCart: true });
+        }
       } else {
-        // gets the first cart and sets the data accordingly
-        const cartData = response.data.carts[0];
-        commit("SET_CART_DATA", { cartData });
-        commit("SET_HAS_CART", { hasCart: true });
+        console.log(res);
       }
-    } catch (error) {
-      console.log(error);
-    }
+    };
+
+    // get user from user module, needed to get user cart
+    const user = getters.getUser;
+
+    await API.get(`/carts/user/${user.id}`, done);
   },
 
   /**
@@ -128,21 +130,21 @@ const actions = {
    * @returns {Object} - either empty or contains error, useful for displaying error to user
    */
   async createCart({ commit }, payload) {
-    try {
-      // creates a new cart
-      const response = await API.createCart(payload);
+    const done = (res) => {
+      if (res?.status === 201) {
+        // needed since the created cart returns id '51'
+        // and this cart is not created in the dummyjson database
+        res.data.id = 1;
 
-      // needed since the created cart returns id '51'
-      // and this cart is not created in the dummyjson database
-      response.data.id = 1;
+        commit("SET_CART_DATA", { cartData: res.data });
+        commit("SET_HAS_CART", { hasCart: true });
+        commit("SET_SNACKBAR", { message: "Product added to cart!", type: "success" });
+      } else {
+        commit("SET_SNACKBAR", { message: "Something went wrong!", type: "error" });
+      }
+    };
 
-      commit("SET_CART_DATA", { cartData: response.data });
-      commit("SET_HAS_CART", { hasCart: true });
-
-      return {};
-    } catch (error) {
-      return { error: error.message };
-    }
+    await API.post("/carts/add", done, payload);
   },
 
   /**
@@ -155,32 +157,30 @@ const actions = {
    * @returns {Object} - either empty or contains error, useful for displaying error to user
    */
   async updateCart({ state, getters, commit, dispatch }, payload) {
+    const done = (res) => {
+      if (res?.status === 200) {
+        commit("SET_CART_DATA", { cartData: res.data });
+        commit("SET_SNACKBAR", { message: "Product added to cart!", type: "success" });
+      } else {
+        commit("SET_SNACKBAR", { message: "Something went wrong!", type: "error" });
+      }
+    };
+
     // gets user id and set userId in payload
     const user = getters.getUser;
     payload.userId = user.id;
 
     // if user has a cart
     if (state.hasCart) {
-      try {
-        // sets the merge property to true,
-        // this is needed if we need to merge the
-        // new data with existing cart data
-        payload.merge = true;
-        const response = await API.updateCart({
-          cart_id: state.cartData.id,
-          data: payload,
-        });
+      // sets the merge property to true,
+      // this is needed if we need to merge the
+      // new data with existing cart data
+      payload.merge = true;
 
-        commit("SET_CART_DATA", { cartData: response.data });
-        return {};
-      } catch (error) {
-        console.log(error);
-        return { error: error.message };
-      }
+      await API.put(`/carts/${state.cartData.id}`, done, payload);
     } else {
       // if user does not have a cart
-      const response = await dispatch("createCart", payload);
-      return response;
+      await dispatch("createCart", payload);
     }
   },
 };
