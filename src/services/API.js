@@ -9,11 +9,11 @@ class AxiosAPI {
   }
 
   /**
+   * GET REQUEST
    *
-   *
-   * @param {String} endpoint
-   * @param {Function} done
-   * @param {Object} headers
+   * @param {String} endpoint - the endpoint url
+   * @param {Function} done - function to run after api response
+   * @param {Object} headers - any additional headers
    * @returns {none}
    */
   async get(endpoint, done, headers) {
@@ -26,12 +26,12 @@ class AxiosAPI {
   }
 
   /**
+   * POST REQUEST
    *
-   *
-   * @param {String} endpoint
-   * @param {Function} done
-   * @param {Object} payload
-   * @param {Object} headers
+   * @param {String} endpoint - the endpoint url
+   * @param {Function} done - function to run after api response
+   * @param {Object} payload - data needed to be passed in body of request
+   * @param {Object} headers - any additional headers
    * @returns {none}
    */
   async post(endpoint, done, payload, headers) {
@@ -44,12 +44,12 @@ class AxiosAPI {
   }
 
   /**
+   * PUT REQUEST
    *
-   *
-   * @param {String} endpoint
-   * @param {Function} done
-   * @param {Object} payload
-   * @param {Object} headers
+   * @param {String} endpoint - the endpoint url
+   * @param {Function} done - function to run after api response
+   * @param {Object} payload - data needed to be passed in body of request
+   * @param {Object} headers - any additional headers
    * @returns {none}
    */
   async put(endpoint, done, payload, headers) {
