@@ -98,8 +98,8 @@ const actions = {
 
         commit("SET_SNACKBAR", { message: "Login Successful!", type: "success" });
 
-        // needed to fetch detailed user
-        // info for admin dashboard
+        // needed to fetch detailed
+        // user info for admin dashboard
         await dispatch("authenticateUser");
 
         // fetches user's cart
