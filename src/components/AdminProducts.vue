@@ -88,8 +88,8 @@
 
     <!-- skeleton loader -->
     <v-container v-if="loading">
-      <div class="d-flex justify-space-between align-center">
-        <v-skeleton-loader type="card-heading" width="300"></v-skeleton-loader>
+      <div class="d-flex justify-space-between align-center mb-3">
+        <v-skeleton-loader type="image" height="20" width="150"></v-skeleton-loader>
         <v-skeleton-loader type="image" height="35" width="200"></v-skeleton-loader>
       </div>
       <v-skeleton-loader type="image" height="50" tile></v-skeleton-loader>
