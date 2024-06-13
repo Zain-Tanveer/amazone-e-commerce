@@ -30,7 +30,12 @@
             </template>
 
             <v-list dense width="200">
-              <v-list-item v-for="item in userLinks" :key="item.text" :to="{ name: item.slug }">
+              <v-list-item
+                v-for="item in userLinks"
+                :key="item.text"
+                :to="{ name: item.slug }"
+                exact
+              >
                 <v-list-item-icon>
                   <v-icon>{{ item.icon }}</v-icon>
                 </v-list-item-icon>
@@ -61,7 +66,7 @@ export default {
 
   data() {
     return {
-      userLinks: [{ icon: "mdi-account-cog", text: "Admin Panel", slug: "admin" }],
+      userLinks: [{ icon: "mdi-home", text: "Home", slug: "home" }],
     };
   },
 

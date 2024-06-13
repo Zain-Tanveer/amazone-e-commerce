@@ -35,11 +35,6 @@
             <span class="text-no-wrap" v-if="value.length <= 16">{{ value }}</span>
           </template>
 
-          <!-- availability -->
-          <template #item.availabilityStatus="{ value }">
-            <span class="text-no-wrap"> {{ value }} </span>
-          </template>
-
           <!-- description -->
           <template #item.description="{ value }">
             <v-tooltip bottom v-if="value.length > 60" max-width="500">
@@ -51,6 +46,17 @@
               <span>{{ value }}</span>
             </v-tooltip>
             <span v-if="value.length <= 60">{{ value }}</span>
+          </template>
+
+          <!-- availability -->
+          <template #item.availabilityStatus="{ value }">
+            <v-chip
+              small
+              :color="availabilityColor(value)"
+              :text-color="availabilityTextColor(value)"
+            >
+              <span class="text-no-wrap font-weight-bold"> {{ value }} </span>
+            </v-chip>
           </template>
 
           <!-- actions -->
@@ -77,7 +83,7 @@
       </v-card>
 
       <!-- delete dialog -->
-      <admin-delete-product
+      <admin-product-delete
         :product_id="deleteProductId"
         :loading="deleteLoading"
         v-model="showDialog"
@@ -113,7 +119,7 @@ export default {
   mixins: [AdminMixin],
 
   components: {
-    AdminDeleteProduct: () => import("@/components/AdminDeleteProduct.vue"),
+    AdminProductDelete: () => import("@/components/AdminProductDelete.vue"),
   },
 
   /**
@@ -288,6 +294,26 @@ export default {
      */
     goToTop() {
       this.$vuetify.goTo(0, { duration: 300, offset: 0, easing: "easeInOutCubic" });
+    },
+
+    /**
+     * Function to get availability chip color
+     *
+     * @param {none}
+     * @returns {void}
+     */
+    availabilityColor(value) {
+      return value.startsWith("In") ? "green" : value.startsWith("Low") ? "yellow" : "";
+    },
+
+    /**
+     * Function to get availability chip text color
+     *
+     * @param {none}
+     * @returns {void}
+     */
+    availabilityTextColor(value) {
+      return value.startsWith("In") ? "white" : value.startsWith("Low") ? "white" : "";
     },
   },
 };
