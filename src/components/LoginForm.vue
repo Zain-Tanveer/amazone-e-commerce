@@ -57,7 +57,7 @@
 
 <script>
 import { mapActions } from "vuex";
-import { USERNAME_RULES, PASSWORD_RULES } from "@/utils/validations.js";
+import { loginRules } from "@/utils/validations.js";
 
 export default {
   data: () => ({
@@ -75,9 +75,7 @@ export default {
      * @param {none}
      * @returns {Array} - rules
      */
-    usernameRules() {
-      return USERNAME_RULES;
-    },
+    usernameRules: () => loginRules.USERNAME_RULES,
 
     /**
      * Computed property to get password rules.
@@ -85,9 +83,7 @@ export default {
      * @param {none}
      * @returns {Array} - rules
      */
-    passwordRules() {
-      return PASSWORD_RULES;
-    },
+    passwordRules: () => loginRules.PASSWORD_RULES,
   },
 
   methods: {

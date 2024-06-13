@@ -5,7 +5,9 @@
 </template>
 
 <script>
-export default {};
+export default {
+  name: "AdminView",
+};
 </script>
 
 <style></style>

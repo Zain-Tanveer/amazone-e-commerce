@@ -13,6 +13,14 @@ const getters = {
    * @returns {Array} All categories
    */
   allCategories: (state) => state.categories,
+
+  /**
+   * Getter to get all category names from state.
+   *
+   * @param {Object} state - The current state object.
+   * @returns {Array} All categories
+   */
+  allCategoryNames: (state) => state.categories.map((category) => category.name.toLowerCase()),
 };
 
 const mutations = {

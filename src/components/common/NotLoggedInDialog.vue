@@ -1,6 +1,6 @@
 <template>
   <!-- dialog box for if user clicks add to cart and is not logged in -->
-  <v-dialog :value="value" max-width="450" v-bind="$attrs">
+  <v-dialog :value="value" max-width="450" v-bind="$attrs" @click:outside="$emit('close-dialog')">
     <v-card>
       <!-- title -->
       <v-card-title class="text-h5 primary--text font-weight-bold"

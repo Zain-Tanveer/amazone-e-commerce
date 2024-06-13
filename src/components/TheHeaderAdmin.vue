@@ -59,16 +59,6 @@ import { mapGetters, mapActions } from "vuex";
 export default {
   name: "TheHeaderAdmin",
 
-  /**
-   * 'created' lifecycle hook used authenticate user
-   *
-   * @param {none}
-   * @returns {void}
-   */
-  created() {
-    this.validateUser();
-  },
-
   data() {
     return {
       userLinks: [{ icon: "mdi-account-cog", text: "Admin Panel", slug: "admin" }],
@@ -80,7 +70,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(["authenticateUser", "logoutUser"]),
+    ...mapActions(["logoutUser"]),
 
     /**
      * Function to handle click of logout button.
@@ -92,27 +82,6 @@ export default {
       await this.logoutUser();
 
       this.$router.push({ name: "login" });
-    },
-
-    /**
-     * Function to authenticate user and check if user is admin
-     *
-     * @param {none}
-     * @returns {void}
-     */
-    async validateUser() {
-      // fetches user authentication
-      const response = await this.authenticateUser();
-
-      if (response.error) {
-        this.$router.push({ name: "home" });
-        return;
-      }
-
-      // if authentication is successful but user is not an admin
-      if (!response.error && this.getUser.role !== "admin") {
-        this.$router.push({ name: "home" });
-      }
     },
   },
 };

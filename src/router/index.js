@@ -116,6 +116,13 @@ const router = new VueRouter({
           meta: { layout: "AdminLayout" },
         },
         {
+          path: "products/update/:product_id",
+          name: "admin-products-update",
+          component: () => import("@/components/AdminProductsUpdate.vue"),
+          meta: { layout: "AdminLayout" },
+          props: true,
+        },
+        {
           path: "users",
           name: "admin-users",
           component: () => import("@/components/AdminUsers.vue"),

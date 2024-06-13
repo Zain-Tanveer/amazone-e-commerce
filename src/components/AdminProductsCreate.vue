@@ -1,9 +1,22 @@
 <template>
-  <h3>Create products</h3>
+  <v-container class="mb-10">
+    <h4 class="blue-grey--text text--darken-3 mb-5 mt-5">Create a Product</h4>
+    <admin-product-form />
+  </v-container>
 </template>
 
 <script>
-export default {};
+import { AdminMixin } from "@/mixins/AdminMixin.js";
+
+export default {
+  name: "AdminProductsCreate",
+
+  mixins: [AdminMixin],
+
+  components: {
+    AdminProductForm: () => import("@/components/AdminProductForm.vue"),
+  },
+};
 </script>
 
 <style></style>

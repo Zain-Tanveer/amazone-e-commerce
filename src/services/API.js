@@ -60,6 +60,24 @@ class AxiosAPI {
       done(err);
     }
   }
+
+  /**
+   * DELETE REQUEST
+   *
+   * @param {String} endpoint - the endpoint url
+   * @param {Function} done - function to run after api response
+   * @param {Object} payload - data needed to be passed in body of request
+   * @param {Object} headers - any additional headers
+   * @returns {none}
+   */
+  async delete(endpoint, done, payload, headers) {
+    try {
+      const res = await this.API.delete(endpoint, payload, { headers });
+      done(res);
+    } catch (err) {
+      done(err);
+    }
+  }
 }
 
 export default new AxiosAPI();
