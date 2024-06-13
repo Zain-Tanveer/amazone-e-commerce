@@ -102,21 +102,13 @@ export default {
      * @returns {void}
      */
     page(newPage) {
-      // if newPage is 1 the resets skip
-      if (newPage === 1) {
-        this.skip = 0;
+      const skip = (newPage - 1) * this.limit;
+
+      if (skip < this.total) {
+        this.skip = skip;
         this.products = [];
         this.goToTop();
         this.fetchProducts();
-      } else {
-        const skip = (newPage - 1) * this.limit;
-
-        if (skip < this.total) {
-          this.skip = skip;
-          this.products = [];
-          this.goToTop();
-          this.fetchProducts();
-        }
       }
     },
   },
