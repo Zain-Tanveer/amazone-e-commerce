@@ -117,16 +117,31 @@
     <v-list-item class="indigo lighten-5">
       <v-btn @click="addMessage">Add Message</v-btn>
     </v-list-item>
+
+    <message-delete-dialog
+      :message="currentMessage"
+      :loading="deleteLoading"
+      v-model="showDeleteDialog"
+      @close-dialog="showDeleteDialog = false"
+      @delete-message="handleDelete"
+    />
   </div>
 </template>
 
 <script>
 export default {
+  components: {
+    MessageDeleteDialog: () => import("@/components/MessageDeleteDialog.vue"),
+  },
+
   mounted() {
     this.scrollToBottom();
   },
 
   data: () => ({
+    deleteLoading: false,
+    showDeleteDialog: false,
+
     currentMessage: {},
 
     messages: [
@@ -180,6 +195,45 @@ export default {
 
     handleMessageDropdownClick(item) {
       console.log("triggered", this.currentMessage);
+      this.handleDeleteClick();
+    },
+
+    /**
+     * Function handle click of delete in delete product dialog
+     *
+     * @param {Number | String} message - Contains the product id
+     * @returns {void}
+     */
+    async handleDelete(message) {
+      this.deleteLoading = true; // sets the loading property to true
+
+      console.log("delete", message);
+      // function passed as parameter to delete api call
+      // const done = (res) => {
+      //   if (res?.status === 200) {
+      //     this.removeProduct(res.data.id); // removes the product from currently listed products array
+      //     this.SET_SNACKBAR({ message: "Product deleted successfully!", type: "success" });
+      //   } else {
+      //     this.SET_SNACKBAR({ message: "Something went wrong!", type: "error" });
+      //   }
+      // };
+
+      // api call to delete the product
+      // await API.delete(`/products/${product_id}`, done);
+
+      this.deleteLoading = false;
+      this.showDeleteDialog = false;
+    },
+
+    /**
+     * Function handle delete product icon click.
+     * Used to open the delete dialog box.
+     *
+     * @param {Object} product - Contains the product that is clicked
+     * @returns {void}
+     */
+    handleDeleteClick() {
+      this.showDeleteDialog = true;
     },
 
     scrollToBottom: function () {
