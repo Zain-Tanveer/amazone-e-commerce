@@ -6,7 +6,7 @@ html {
   overflow-y: hidden !important;
 }
 
-::-webkit-scrollbar {
+/* ::-webkit-scrollbar {
   width: 0.375rem !important;
   height: 0.375rem !important;
 }
@@ -23,4 +23,4 @@ html {
 
 ::-webkit-scrollbar-thumb:hover {
   background: #555 !important;
-}
+} */

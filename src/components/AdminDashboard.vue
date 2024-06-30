@@ -114,9 +114,6 @@
         </v-list>
       </v-menu>
     </div>
-    <v-list-item class="indigo lighten-5">
-      <v-btn @click="addMessage">Add Message</v-btn>
-    </v-list-item>
 
     <message-delete-dialog
       :message="currentMessage"
@@ -147,6 +144,78 @@ export default {
     messages: [
       {
         id: 20000,
+        userId: 10000,
+        userFullName: "Zain Tanveer",
+        text: "This is a newly created message",
+        createdAt: new Date(),
+        channelId: 3000,
+        user_image: "",
+      },
+      {
+        id: 20001,
+        userId: 10000,
+        userFullName: "Zain Tanveer",
+        text: "This is a newly created message",
+        createdAt: new Date(),
+        channelId: 3000,
+        user_image: "",
+      },
+      {
+        id: 20002,
+        userId: 10000,
+        userFullName: "Zain Tanveer",
+        text: "This is a newly created message",
+        createdAt: new Date(),
+        channelId: 3000,
+        user_image: "",
+      },
+      {
+        id: 20003,
+        userId: 10000,
+        userFullName: "Zain Tanveer",
+        text: "This is a newly created message",
+        createdAt: new Date(),
+        channelId: 3000,
+        user_image: "",
+      },
+      {
+        id: 20004,
+        userId: 10000,
+        userFullName: "Zain Tanveer",
+        text: "This is a newly created message",
+        createdAt: new Date(),
+        channelId: 3000,
+        user_image: "",
+      },
+      {
+        id: 20005,
+        userId: 10000,
+        userFullName: "Zain Tanveer",
+        text: "This is a newly created message",
+        createdAt: new Date(),
+        channelId: 3000,
+        user_image: "",
+      },
+      {
+        id: 20006,
+        userId: 10000,
+        userFullName: "Zain Tanveer",
+        text: "This is a newly created message",
+        createdAt: new Date(),
+        channelId: 3000,
+        user_image: "",
+      },
+      {
+        id: 20007,
+        userId: 10000,
+        userFullName: "Zain Tanveer",
+        text: "This is a newly created message",
+        createdAt: new Date(),
+        channelId: 3000,
+        user_image: "",
+      },
+      {
+        id: 20008,
         userId: 10000,
         userFullName: "Zain Tanveer",
         text: "This is a newly created message",
@@ -193,7 +262,7 @@ export default {
       });
     },
 
-    handleMessageDropdownClick(item) {
+    handleMessageDropdownClick() {
       console.log("triggered", this.currentMessage);
       this.handleDeleteClick();
     },
@@ -263,7 +332,7 @@ export default {
 <style style>
 .message-area {
   background-color: #f9f9fc !important;
-  height: calc(100vh - 240px);
+  height: calc(100vh - 200px);
 }
 
 .message-display {
@@ -281,10 +350,6 @@ export default {
 
 .h-100 {
   height: 100% !important;
-}
-
-.message {
-  /* background-color: #eeeff7; */
 }
 
 .message-options {

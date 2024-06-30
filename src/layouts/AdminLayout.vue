@@ -1,13 +1,18 @@
 <template>
   <v-app>
-    <v-layout v-if="!loading">
+    <template v-if="!loading">
       <the-header-admin @toggle-sidebar="handleToggleSidebar" />
       <the-sidebar-admin v-model="showSidebar" />
+
       <v-main>
         <!-- main content -->
         <router-view></router-view>
       </v-main>
-    </v-layout>
+
+      <v-footer app outlined inset class="pa-0 ma-4">
+        <admin-dashboard-message-editor />
+      </v-footer>
+    </template>
 
     <v-overlay :value="loading">
       <v-progress-circular indeterminate size="64"></v-progress-circular>
@@ -22,6 +27,7 @@ export default {
   components: {
     TheHeaderAdmin: () => import("@/components/TheHeaderAdmin.vue"),
     TheSidebarAdmin: () => import("@/components/TheSidebarAdmin.vue"),
+    AdminDashboardMessageEditor: () => import("@/components/AdminDashboardMessageEditor.vue"),
   },
 
   mixins: [AdminMixin],
